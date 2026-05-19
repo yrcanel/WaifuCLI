@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WaifuCLI.Core.Interfaces;
+﻿using WaifuCLI.Core.Interfaces;
 using WaifuCLI.Core.Models;
 using System.Text.Json;
+using WaifuCLI.Core.Exceptions;
 
 namespace WaifuCLI.Infrastructure.JSONDeserializer
 {
     class JSONDeserializer : IJSONDeserializer
     {
-        public async Task<WaifuImage> DeserializeJsonAsync(Stream responseStream)
+        public async Task<WaifuImage?> DeserializeJsonAsync(Stream responseStream)
         {
+            WaifuImage? image;
             RootJSON? images = await JsonSerializer.DeserializeAsync<RootJSON>(responseStream);
-            if (images == null)
+            if (images is null)
             {
-                throw new Exception("An error occured while deserializing JSON");
+                throw new SerializationException("API returned null payload");
             }
             if (images.items.Count <= 0)
             {
-                throw new Exception("No images with specified tags were found");
+                image = null;
+                return image;
             }
-            WaifuImage image = images.items[0]; 
+            image = images.items[0]; 
             return image;
         }
     }

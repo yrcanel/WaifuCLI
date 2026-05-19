@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WaifuCLI.Core.Interfaces;
+﻿using WaifuCLI.Core.Interfaces;
 
 namespace WaifuCLI.Infrastructure.URLBuilder
 {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WaifuCLI.Core.Interfaces;
-
+﻿using WaifuCLI.Core.Interfaces;
+using WaifuCLI.Core.Exceptions;
 namespace WaifuCLI.Infrastructure.ImageDownloader
 {
     class ImageDownloader : IImageDownloader
@@ -10,8 +7,21 @@ namespace WaifuCLI.Infrastructure.ImageDownloader
         public async Task DownloadImageAsync(string imagePath, Stream ImageStream)
         {
 
-            await using FileStream output = File.Create(imagePath);
-            await ImageStream.CopyToAsync(output);
+            try
+            {
+                await using FileStream output = File.Create(imagePath);
+                await ImageStream.CopyToAsync(output);
+            }
+            catch(UnauthorizedAccessException)
+            {
+                throw new DownloadException("Failed to write file: UnauthorizedAccess");
+            }
+            catch (PathTooLongException)
+            {
+                throw new DownloadException($"Specified path is too long");
+            }
+            
+            
         }
     }
 }

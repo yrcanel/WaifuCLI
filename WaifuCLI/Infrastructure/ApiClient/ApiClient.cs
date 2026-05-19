@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata;
-using System.Text;
-using WaifuCLI.Core.Interfaces;
-
+﻿using WaifuCLI.Core.Interfaces;
+using WaifuCLI.Core.Exceptions;
 namespace WaifuCLI.Infrastructure.ApiClient
 {
     class ApiClient : IApiClient
@@ -18,8 +14,16 @@ namespace WaifuCLI.Infrastructure.ApiClient
         public async Task<Stream> GetResponseStreamAsync(string[]? tags, bool? isNsfw)
         {
             string requestURL = URLBuilder.BuldUrlWithTags(tags, isNsfw);
-            HttpResponseMessage responseMessage = await httpClient.GetAsync(httpClient.BaseAddress + requestURL);           
-            responseMessage.EnsureSuccessStatusCode();           
+            HttpResponseMessage responseMessage = await httpClient.GetAsync(httpClient.BaseAddress + requestURL);
+            
+            try 
+            {
+                responseMessage.EnsureSuccessStatusCode();
+            }          
+            catch (HttpRequestException ex)
+            {
+                throw new ApiException($"HTTP {(int)responseMessage.StatusCode} : {responseMessage.ReasonPhrase}", (int)responseMessage.StatusCode, ex);
+            }
             Stream responceStream = await responseMessage.Content.ReadAsStreamAsync();     
             return responceStream;
         }

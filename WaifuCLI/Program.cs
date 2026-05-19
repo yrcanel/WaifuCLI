@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
-using System;
-using System.Drawing;
 using WaifuCLI.Core.Engine;
 using WaifuCLI.Core.Interfaces;
-using WaifuCLI.Core.Models;
 using WaifuCLI.Infrastructure.ApiClient;
 using WaifuCLI.Infrastructure.ImageClient;
 using WaifuCLI.Infrastructure.ImageDownloader;
@@ -32,7 +28,16 @@ namespace WaifuCLI
             services.AddSingleton<IEngine, Engine>();
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             IEngine engine = serviceProvider.GetRequiredService<IEngine>();
-            await engine.GetAndDownloadImageAsync(["waifu", "ecchi"], true, "C:/Users/vd682/OneDrive/Pictures");
+            try
+            {
+                await engine.GetAndDownloadImageAsync(["waifu", "genshin-impact"], false, "C:/Users/vd682/OneDrive/Pictures");
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine($"Unexpected error: {ex}");
+                Environment.Exit(99);
+            }
+            
 
 
         }
