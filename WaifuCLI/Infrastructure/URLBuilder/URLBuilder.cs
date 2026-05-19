@@ -4,7 +4,7 @@ namespace WaifuCLI.Infrastructure.URLBuilder
 {
     class URLBuilder : IURLBuilder
     {
-        public string BuldUrlWithTags(string[]? tags, bool? isNsfw)
+        public string BuildUrlWithTags(string[]? tags, bool? isNsfw)
         {
             string url = string.Empty;
             if (tags != null)
