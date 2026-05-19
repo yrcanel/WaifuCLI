@@ -6,6 +6,6 @@ namespace WaifuCLI.Core.Interfaces
 {
     interface IURLBuilder
     {
-        string BuldUrlWithTags(string[]? tags, bool? isNsfw);
+        string BuildUrlWithTags(string[]? tags, bool? isNsfw);
     }
 }
