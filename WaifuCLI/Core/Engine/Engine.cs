@@ -43,7 +43,7 @@ namespace WaifuCLI.Core.Engine
             }
             catch (CliException ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.Message);
                 Environment.Exit(1);
             }
             

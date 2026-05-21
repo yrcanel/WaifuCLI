@@ -20,6 +20,10 @@ namespace WaifuCLI.Infrastructure.URLBuilder
 
                 url += $"&IsNsfw={isNsfw}";
             }
+            else
+            {
+                url += $"&IsNsfw=All";
+            }
             
             return url ;
             
