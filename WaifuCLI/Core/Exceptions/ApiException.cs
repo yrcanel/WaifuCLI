@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WaifuCLI.Core.Exceptions
+﻿namespace WaifuCLI.Core.Exceptions
 {
     class ApiException : CliException
     {

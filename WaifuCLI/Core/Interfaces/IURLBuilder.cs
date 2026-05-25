@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WaifuCLI.Core.Interfaces
+﻿namespace WaifuCLI.Core.Interfaces
 {
-    interface IURLBuilder
+    interface IUrlBuilder
     {
         string BuildUrlWithTags(string[]? tags, bool? isNsfw);
     }

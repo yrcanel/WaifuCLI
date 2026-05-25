@@ -3,14 +3,14 @@ using WaifuCLI.Core.Models;
 using System.Text.Json;
 using WaifuCLI.Core.Exceptions;
 
-namespace WaifuCLI.Infrastructure.JSONDeserializer
+namespace WaifuCLI.Infrastructure.JsonDeserializer
 {
-    class JSONDeserializer : IJSONDeserializer
+    class JsonDeserializer : IJsonDeserializer
     {
         public async Task<WaifuImage?> DeserializeJsonAsync(Stream responseStream)
         {
             WaifuImage? image;
-            RootJSON? images = await JsonSerializer.DeserializeAsync<RootJSON>(responseStream);
+            RootJson? images = await JsonSerializer.DeserializeAsync<RootJson>(responseStream);
             if (images is null)
             {
                 throw new SerializationException("API returned null payload");

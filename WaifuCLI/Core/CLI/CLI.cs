@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.Text;
+﻿using System.CommandLine;
 using WaifuCLI.Core.Interfaces;
 
-namespace WaifuCLI.Core.CLI
+namespace WaifuCLI.Core.Cli
 {
-    class CLI : ICLI
+    class Cli : ICli
     {
-        private readonly IEngine engine;
-        public CLI(IEngine engine)      
+        private readonly IEngine _engine;
+        public Cli(IEngine engine)      
         {
-            this.engine = engine;
+            _engine = engine;
         }   
 
         public async Task<int> StartCli(string[] args)
@@ -40,7 +37,7 @@ namespace WaifuCLI.Core.CLI
                 {
                     return 1;
                 }
-                await engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath);
+                await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath);
                 return 0;
 
             });

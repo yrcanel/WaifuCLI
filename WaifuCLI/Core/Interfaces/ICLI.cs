@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WaifuCLI.Core.Interfaces
+﻿namespace WaifuCLI.Core.Interfaces
 {
-    interface ICLI
+    interface ICli
     {
         Task<int> StartCli(string[] args);
     }

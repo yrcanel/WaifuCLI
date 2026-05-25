@@ -1,8 +1,8 @@
 ﻿using WaifuCLI.Core.Interfaces;
 
-namespace WaifuCLI.Infrastructure.URLBuilder
+namespace WaifuCLI.Infrastructure.UrlBuilder
 {
-    class URLBuilder : IURLBuilder
+    class UrlBuilder : IUrlBuilder
     {
         public string BuildUrlWithTags(string[]? tags, bool? isNsfw)
         {

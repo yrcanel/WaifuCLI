@@ -5,15 +5,15 @@ namespace WaifuCLI.Infrastructure.ImageClient
 {
     class ImageClient : IImageClient
     {
-        private readonly HttpClient httpClient;
+        private readonly HttpClient _httpClient;
         public ImageClient(HttpClient httpClient)
         {
-            this.httpClient = httpClient;
+            _httpClient = httpClient;
         }
 
         public async Task<Stream> GetImageStreamAsync(Uri url)
         {
-            HttpResponseMessage ImageResponse = await httpClient.GetAsync(url);
+            HttpResponseMessage ImageResponse = await _httpClient.GetAsync(url);
             try
             {
                 ImageResponse.EnsureSuccessStatusCode();

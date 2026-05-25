@@ -1,5 +1,6 @@
 ﻿using WaifuCLI.Core.Interfaces;
 using WaifuCLI.Core.Exceptions;
+
 namespace WaifuCLI.Infrastructure.ImageDownloader
 {
     class ImageDownloader : IImageDownloader

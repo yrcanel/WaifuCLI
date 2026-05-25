@@ -1,15 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.CommandLine;
-using System.CommandLine.Parsing;
-using System.Reflection.Metadata.Ecma335;
-using WaifuCLI.Core.CLI;
+using WaifuCLI.Core.Cli;
 using WaifuCLI.Core.Engine;
 using WaifuCLI.Core.Interfaces;
 using WaifuCLI.Infrastructure.ApiClient;
 using WaifuCLI.Infrastructure.ImageClient;
 using WaifuCLI.Infrastructure.ImageDownloader;
-using WaifuCLI.Infrastructure.JSONDeserializer;
-using WaifuCLI.Infrastructure.URLBuilder;
+using WaifuCLI.Infrastructure.JsonDeserializer;
+using WaifuCLI.Infrastructure.UrlBuilder;
 
 namespace WaifuCLI
 {
@@ -25,14 +22,14 @@ namespace WaifuCLI
                 client.BaseAddress = new Uri("https://api.waifu.im/images?");
             });
             services.AddHttpClient<ImageClient>();
-            services.AddSingleton<IURLBuilder, URLBuilder>();
-            services.AddSingleton<IJSONDeserializer, JSONDeserializer>();
+            services.AddSingleton<IUrlBuilder, UrlBuilder>();
+            services.AddSingleton<IJsonDeserializer, JsonDeserializer>();
             services.AddSingleton<IImageClient, ImageClient>();
             services.AddSingleton<IImageDownloader, ImageDownloader>();
             services.AddSingleton<IEngine, Engine>();
-            services.AddSingleton<ICLI, CLI>();
+            services.AddSingleton<ICli, Cli>();
             IServiceProvider serviceProvider = services.BuildServiceProvider();
-            ICLI cli = serviceProvider.GetRequiredService<ICLI>();
+            ICli cli = serviceProvider.GetRequiredService<ICli>();
             try
             {
                 int exitCode = await cli.StartCli(args);

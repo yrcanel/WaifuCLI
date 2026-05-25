@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WaifuCLI.Core.Models;
+﻿using WaifuCLI.Core.Models;
 
 
 namespace WaifuCLI.Core.Interfaces
 {
-    interface IJSONDeserializer
+    interface IJsonDeserializer
     {
         Task<WaifuImage?> DeserializeJsonAsync(Stream responseStream);
     }
