@@ -15,7 +15,6 @@ namespace WaifuCLI.Infrastructure.ApiClient
         public async Task<Stream> GetResponseStreamAsync(string[]? tags, bool? isNsfw)
         {
             string requestURL = _UrlBuilder.BuildUrlWithTags(tags, isNsfw);
-            Console.WriteLine(requestURL);
             HttpResponseMessage responseMessage = await _httpClient.GetAsync(requestURL);
             
             try 
