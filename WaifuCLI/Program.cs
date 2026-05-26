@@ -17,11 +17,12 @@ namespace WaifuCLI
         public static async Task<int> Main(string[] args)
         {
             IServiceCollection services = new ServiceCollection();
-            services.AddHttpClient<IApiClient, ApiClient>(client =>
-            {
-                client.BaseAddress = new Uri("https://api.waifu.im/images?");
-            });
+            services.AddHttpClient<IApiClient, ApiClient>();
             services.AddHttpClient<ImageClient>();
+            services.AddSingleton<UriBuilder>(_ =>
+            {
+                return new UriBuilder("https://api.waifu.im/");
+            });
             services.AddSingleton<IUrlBuilder, UrlBuilder>();
             services.AddSingleton<IJsonDeserializer, JsonDeserializer>();
             services.AddSingleton<IImageClient, ImageClient>();
