@@ -19,30 +19,16 @@ namespace WaifuCLI.Core.Engine
         }
 
         public async Task  GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir)
-        {
-            try
-            {
-                if (!Directory.Exists(outputDir))
-                {
-                    Console.WriteLine("Specified directory isn't found");
-                    Environment.Exit(0);
-                }
+        { 
                 using Stream waifuStream = await _apiClient.GetResponseStreamAsync(tags, IsNsfw);
                 WaifuImage? waifuImageObject = await _jsonDeserializer.DeserializeJsonAsync(waifuStream);
                 if (waifuImageObject is null)
                 {
                     Console.WriteLine("No images with specified tags were found");
-                    Environment.Exit(0);
+                    return;
                 }
                 using Stream imageStream = await _imageClient.GetImageStreamAsync(waifuImageObject.url);
                 await _imageDownloader.DownloadImageAsync($"{outputDir}/{waifuImageObject.id}.png", imageStream);
-
-            }
-            catch (CliException ex)
-            {
-                Console.Error.WriteLine(ex.Message);
-                Environment.Exit(1);
-            }
             
         }
     }

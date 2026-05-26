@@ -31,17 +31,10 @@ namespace WaifuCLI
             services.AddSingleton<ICli, Cli>();
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ICli cli = serviceProvider.GetRequiredService<ICli>();
-            try
-            {
-                int exitCode = await cli.StartCli(args);
-                return exitCode;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Unexpected error: {ex}");
-                Environment.Exit(99);
-            }
-            return 0;
+            
+            int exitCode = await cli.StartCli(args);
+            return exitCode;
+            
         }
     }
 }

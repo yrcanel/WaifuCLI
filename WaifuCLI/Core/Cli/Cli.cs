@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using WaifuCLI.Core.Exceptions;
 using WaifuCLI.Core.Interfaces;
 
 namespace WaifuCLI.Core.Cli
@@ -37,7 +38,20 @@ namespace WaifuCLI.Core.Cli
                 {
                     return 1;
                 }
-                await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath);
+                try
+                {
+                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath);
+                }
+                catch (CliException cex)
+                {
+                    Console.Error.WriteLine(cex.Message);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error: {ex}");
+                    return 99;
+                }
                 return 0;
 
             });
