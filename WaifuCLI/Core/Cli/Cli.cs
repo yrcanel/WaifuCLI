@@ -14,11 +14,11 @@ namespace WaifuCLI.Core.Cli
 
         public async Task<int> StartCli(string[] args)
         {
-            Option<string[]> tags = new("--tags")
+            Option<string[]?> tags = new("--tags")
             {
                 Description = "List of tags for finding an image with those tags; Default: random image"
             };
-            Option<bool> isNsfw = new("--IsNsfw")
+            Option<bool?> isNsfw = new("--IsNsfw")
             {
                 Description = "Turn on|off 18+ content; Default: All"
             };
