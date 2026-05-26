@@ -4,29 +4,46 @@ namespace WaifuCLI.Infrastructure.UrlBuilder
 {
     class UrlBuilder : IUrlBuilder
     {
+        private UriBuilder _uriBuilder;
+        public UrlBuilder(UriBuilder uriBuilder)
+        {
+            _uriBuilder = uriBuilder;
+        }
+
         public string BuildUrlWithTags(string[]? tags, bool? isNsfw)
         {
-            string url = string.Empty;
+            _uriBuilder.Path = "images";
             if (tags != null)
             {
                 foreach (string tag in tags)
                 {
-                    url += $"&IncludedTags={tag}";
+                    AppendValue($"IncludedTags={tag}");
                 }
             }
             
             if (isNsfw != null)
             {
-
-                url += $"&IsNsfw={isNsfw}";
+                AppendValue($"IsNsfw={isNsfw}");
             }
             else
             {
-                url += $"&IsNsfw=All";
+                AppendValue($"IsNsfw=All");
             }
             
-            return url ;
+            return _uriBuilder.Uri.AbsoluteUri;
             
+            
+        }
+        private void AppendValue(string value) 
+        {
+            if (_uriBuilder.Query != null && _uriBuilder.Query.Length > 1)
+            {
+                _uriBuilder.Query = _uriBuilder.Query + "&" + value;
+            }
+            else
+            {
+                _uriBuilder.Query += value;
+            }
         }
     }
 }
