@@ -1,6 +1,6 @@
 ﻿namespace WaifuCLI.Core.Interfaces
 {
-    interface ICli
+    public interface ICli
     {
         Task<int> StartCli(string[] args);
     }

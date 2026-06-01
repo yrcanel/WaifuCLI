@@ -3,7 +3,7 @@ using WaifuCLI.Core.Exceptions;
 
 namespace WaifuCLI.Infrastructure.ApiClient
 {
-    class ApiClient : IApiClient
+    public class ApiClient : IApiClient
     {
         private readonly HttpClient _httpClient;
         private readonly IUrlBuilder _UrlBuilder;

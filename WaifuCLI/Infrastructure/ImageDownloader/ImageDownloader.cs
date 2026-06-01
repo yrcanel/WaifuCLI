@@ -3,7 +3,7 @@ using WaifuCLI.Core.Exceptions;
 
 namespace WaifuCLI.Infrastructure.ImageDownloader
 {
-    class ImageDownloader : IImageDownloader
+    public class ImageDownloader : IImageDownloader
     {
         public async Task DownloadImageAsync(string imagePath, Stream ImageStream)
         {

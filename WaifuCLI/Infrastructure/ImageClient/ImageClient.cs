@@ -3,7 +3,7 @@ using WaifuCLI.Core.Interfaces;
 
 namespace WaifuCLI.Infrastructure.ImageClient
 {
-    class ImageClient : IImageClient
+    public class ImageClient : IImageClient
     {
         private readonly HttpClient _httpClient;
         public ImageClient(HttpClient httpClient)

@@ -1,6 +1,6 @@
 ﻿namespace WaifuCLI.Core.Interfaces
 {
-    interface IImageDownloader
+    public interface IImageDownloader
     {
         Task DownloadImageAsync(string imagePath, Stream ImageStream);
     }

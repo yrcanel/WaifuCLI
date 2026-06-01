@@ -1,6 +1,6 @@
 ﻿namespace WaifuCLI.Core.Interfaces
 {
-    interface IApiClient
+    public interface IApiClient
     {
         Task<Stream> GetResponseStreamAsync(string[]? tags, bool? isNsfw);
         

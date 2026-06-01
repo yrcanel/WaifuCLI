@@ -3,7 +3,7 @@
 
 namespace WaifuCLI.Core.Interfaces
 {
-    interface IJsonDeserializer
+    public interface IJsonDeserializer
     {
         Task<WaifuImage?> DeserializeJsonAsync(Stream responseStream);
     }

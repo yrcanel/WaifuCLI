@@ -1,0 +1,51 @@
+﻿using NSubstitute;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using WaifuCLI.Core.Interfaces;
+using WaifuCLI.Infrastructure.UrlBuilder;
+
+namespace WaifuCLI.Tests
+{
+
+    public class UrlBuilderTest
+    {
+        [Fact]
+        public void BuildUrlWithTags_AllArgumentsGiven_ShouldReturnStr()
+        {
+            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=True";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], true);
+            Assert.Equal(expectedUrl, resultUrl);
+        }
+        [Fact]
+        public void BuildUrlWithTags_AllArgumentsOmited_ShouldReturnStr()
+        {
+            string expectedUrl = "https://api.waifu.im/images?IsNsfw=All";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string resultUrl = builder.BuildUrlWithTags(null, null);
+            Assert.Equal(expectedUrl, resultUrl);
+        }
+        [Fact]
+        public void BuildUrlWithTags_TagsOmited_ShouldReturnStr()
+        {
+            string expectedUrl = "https://api.waifu.im/images?IsNsfw=False";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string resultUrl = builder.BuildUrlWithTags(null, false);
+            Assert.Equal(expectedUrl, resultUrl);
+        }
+        [Fact]
+        public void BuildUrlWithTags_IsNsfwOmited_ShouldReturnStr()
+        {
+            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=All";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], null);
+            Assert.Equal(expectedUrl, resultUrl);
+        }
+
+    }
+}

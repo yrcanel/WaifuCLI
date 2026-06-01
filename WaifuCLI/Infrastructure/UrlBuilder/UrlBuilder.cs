@@ -2,7 +2,7 @@
 
 namespace WaifuCLI.Infrastructure.UrlBuilder
 {
-    class UrlBuilder : IUrlBuilder
+    public class UrlBuilder : IUrlBuilder
     {
         private UriBuilder _uriBuilder;
         public UrlBuilder(UriBuilder uriBuilder)

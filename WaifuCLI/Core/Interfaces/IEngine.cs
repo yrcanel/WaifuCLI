@@ -1,6 +1,6 @@
 ﻿namespace WaifuCLI.Core.Interfaces
 {
-    interface IEngine
+    public interface IEngine
     {
         Task GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir);
         
