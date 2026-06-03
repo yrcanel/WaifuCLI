@@ -31,7 +31,6 @@ namespace WaifuCLI
             services.AddSingleton<ICli, Cli>();
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ICli cli = serviceProvider.GetRequiredService<ICli>();
-            
             int exitCode = await cli.StartCli(args);
             return exitCode;
             

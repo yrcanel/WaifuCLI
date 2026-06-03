@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using WaifuCLI.Core.Exceptions;
 using WaifuCLI.Core.Interfaces;
@@ -11,7 +12,7 @@ namespace WaifuCLI.Tests
     public class JsonDeserializerTest
     {
         [Fact]
-        public async Task DeserializeJsonAsync_GoodJson_ShouldParse()
+        public async Task DeserializeImageJsonAsync_GoodJson_ShouldParse()
         {
             WaifuImage expectedWaifuImage = new WaifuImage(7783, false, new Uri("https://cdn.waifu.im/7783.jpg"));
             string json = """
@@ -27,12 +28,12 @@ namespace WaifuCLI.Tests
             """;
             using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             JsonDeserializer jsonDeserializer = new JsonDeserializer();
-            WaifuImage? resultWaifuImage = await jsonDeserializer.DeserializeJsonAsync(stream);
+            WaifuImage? resultWaifuImage = await jsonDeserializer.DeserializeImageJsonAsync(stream);
             Assert.NotNull(resultWaifuImage);
             Assert.Equal(expectedWaifuImage, resultWaifuImage);
         }
         [Fact]
-        public async Task DeserializeJsonAsync_NoPayloadFound_ShouldParse()
+        public async Task DeserializeImageJsonAsync_NoPayloadFound_ShouldThrow()
         {
             
             string json = """
@@ -42,11 +43,11 @@ namespace WaifuCLI.Tests
             JsonDeserializer jsonDeserializer = new JsonDeserializer();
             await Assert.ThrowsAsync<SerializationException>(async () =>
             {
-                await jsonDeserializer.DeserializeJsonAsync(stream);
+                await jsonDeserializer.DeserializeImageJsonAsync(stream);
             });
         }
         [Fact]
-        public async Task DeserializeJsonAsync_NoImagesFound_ShouldParse()
+        public async Task DeserializeImageJsonAsync_NoImagesFound_ShouldParse()
         {
 
             string json = """
@@ -54,8 +55,63 @@ namespace WaifuCLI.Tests
             """;
             using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             JsonDeserializer jsonDeserializer = new JsonDeserializer();
-            WaifuImage? image = await jsonDeserializer.DeserializeJsonAsync(stream);
+            WaifuImage? image = await jsonDeserializer.DeserializeImageJsonAsync(stream);
             Assert.Null(image);
+        }
+        [Fact]
+        public async Task DeserializeTagJsonAsync_GoodJson_ShouldParse()
+        {
+            Tag expectedTag = new Tag(12, "Waifu", "waifu", "A female anime/manga character.");
+            string json = """
+            {
+            	"items": 
+                [
+            		{
+            			"id": 12,
+            			"name": "Waifu",
+            			"slug": "waifu",
+            			"description": "A female anime/manga character.",
+            			"reviewStatus": "Accepted",
+            			"creatorId": null,
+            			"imageCount": 4269
+            		}
+            	]
+            	
+            }
+            """;
+            using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            JsonDeserializer jsonDeserializer = new JsonDeserializer();
+            Tag[]? resultTags = await jsonDeserializer.DeserializeTagJsonAsync(stream);
+            Assert.NotNull(resultTags);
+            Assert.Equal(expectedTag, resultTags[0]);
+        }
+        [Fact]
+        public async Task DeserializeTagJsonAsync_NoPayloadFound_ShouldThrow()
+        {
+
+            string json = """
+            {  }
+            """;
+            using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            JsonDeserializer jsonDeserializer = new JsonDeserializer();
+            await Assert.ThrowsAsync<SerializationException>(async () =>
+            {
+                await jsonDeserializer.DeserializeTagJsonAsync(stream);
+            });
+        }
+        [Fact]
+        public async Task DeserializeTagJsonAsync_NoTagsFound_ShouldThrow()
+        {
+
+            string json = """
+            { "items": [] }
+            """;
+            using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            JsonDeserializer jsonDeserializer = new JsonDeserializer();
+            await Assert.ThrowsAsync<SerializationException>(async () =>
+            {
+                await jsonDeserializer.DeserializeTagJsonAsync(stream);
+            });
         }
     }
 }

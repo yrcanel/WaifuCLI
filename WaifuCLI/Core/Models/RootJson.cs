@@ -1,5 +1,5 @@
 ﻿namespace WaifuCLI.Core.Models
 {
-    public record class RootJson(List <WaifuImage>? items);
+    public record class RootJson<T>(List <T>? items);
       
 }

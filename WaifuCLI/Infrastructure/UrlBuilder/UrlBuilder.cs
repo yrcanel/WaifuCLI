@@ -34,6 +34,12 @@ namespace WaifuCLI.Infrastructure.UrlBuilder
             
             
         }
+        public string BuildUrlForTags()
+        {
+            _uriBuilder.Query = "";
+            _uriBuilder.Path = "tags";
+            return _uriBuilder.Uri.AbsoluteUri;
+        }
         private void AppendValue(string value) 
         {
             if (_uriBuilder.Query != null && _uriBuilder.Query.Length > 1)

@@ -46,6 +46,24 @@ namespace WaifuCLI.Tests
             string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], null);
             Assert.Equal(expectedUrl, resultUrl);
         }
+        [Fact]
+        public void BuildUrlForTags_CleanQuery_ShouldReturnSrt()
+        {
+            string expected = "https://api.waifu.im/tags";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string result = builder.BuildUrlForTags();
+            Assert.Equal(expected, result);
+        }
+        [Fact]
+        public void BuildUrlForTags_FullQuery_ShouldReturnSrt()
+        {
+            string expected = "https://api.waifu.im/tags";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/images?IncludedTags=waifu&isNsfw=True");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string result = builder.BuildUrlForTags();
+            Assert.Equal(expected, result);
+        }
 
     }
 }

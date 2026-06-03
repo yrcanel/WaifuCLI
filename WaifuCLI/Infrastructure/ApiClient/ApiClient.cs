@@ -28,5 +28,21 @@ namespace WaifuCLI.Infrastructure.ApiClient
             Stream responceStream = await responseMessage.Content.ReadAsStreamAsync();     
             return responceStream;
         }
+
+        public async Task<Stream> GetTagsStreamAsync()
+        {
+            string requestUrl = _UrlBuilder.BuildUrlForTags();
+            HttpResponseMessage responseMessage = await _httpClient.GetAsync(requestUrl);
+            try
+            {
+                responseMessage.EnsureSuccessStatusCode();
+            }
+            catch(HttpRequestException ex)
+            {
+                throw new ApiException($"HTTP {(int)responseMessage.StatusCode} : {responseMessage.ReasonPhrase}", (int)responseMessage.StatusCode, ex);
+            }
+            Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
+            return responseStream;
+        }
     }
 }
