@@ -3,7 +3,9 @@
     public interface IEngine
     {
         Task GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir);
-        
+        Task GetAndPrintTagsAsync();
+
+
 
     }
 }

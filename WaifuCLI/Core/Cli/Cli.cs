@@ -28,6 +28,9 @@ namespace WaifuCLI.Core.Cli
                 Description = "Path where the image will be saved"
             };
             RootCommand rootCommand = new("Simple app for downloading waifu images");
+            Command getTags = new("get-tags", "Display a list of awailable tags");
+            rootCommand.Subcommands.Add(getTags);
+
             rootCommand.Add(path);
             rootCommand.Add(isNsfw);
             rootCommand.Add(tags);
@@ -54,6 +57,24 @@ namespace WaifuCLI.Core.Cli
                 }
                 return 0;
 
+            });
+            getTags.SetAction(async parseResult =>
+            {
+                try
+                {
+                    await _engine.GetAndPrintTagsAsync();
+                }
+                catch (CliException cex)
+                {
+                    Console.Error.WriteLine(cex.Message);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error: {ex}");
+                    return 99;
+                }
+                return 0;
             });
             ParseResult parseResult = rootCommand.Parse(args);
             return await parseResult.InvokeAsync();

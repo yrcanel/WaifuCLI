@@ -1,6 +1,7 @@
 ﻿using WaifuCLI.Core.Exceptions;
 using WaifuCLI.Core.Interfaces;
 using WaifuCLI.Core.Models;
+using WaifuCLI.Utils;
 
 namespace WaifuCLI.Core.Engine
 {
@@ -29,6 +30,12 @@ namespace WaifuCLI.Core.Engine
             }
             using Stream imageStream = await _imageClient.GetImageStreamAsync(waifuImageObject.url);
             await _imageDownloader.DownloadImageAsync($"{outputDir}/{waifuImageObject.id}.png", imageStream);
+        }
+        public async Task GetAndPrintTagsAsync()
+        {
+            using Stream tagsStream = await _apiClient.GetTagsStreamAsync();
+            Tag[] tags = await _jsonDeserializer.DeserializeTagJsonAsync(tagsStream);
+            await Utils.Utils.PrintTagsAsync(tags);
         }
     }
 }
