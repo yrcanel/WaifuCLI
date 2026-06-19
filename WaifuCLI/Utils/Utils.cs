@@ -13,6 +13,26 @@ namespace WaifuCLI.Utils
             {
                 Console.WriteLine(tag.ToString());
             }
-        } 
+        }
+        public static async Task StartSpinner(string message, CancellationToken token)
+        {
+            string[] frames = { "/", "-", "\\", "|" };
+            int counter = 0;
+            while (!token.IsCancellationRequested)
+            {
+
+                Console.Write($"\r{frames[counter % frames.Length]} {message}");
+                counter++;
+                try
+                {
+                    await Task.Delay(75, token);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+            }
+
+        }
     }
 }

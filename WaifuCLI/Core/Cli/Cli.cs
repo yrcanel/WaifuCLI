@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Security.Cryptography.X509Certificates;
 using WaifuCLI.Core.Exceptions;
 using WaifuCLI.Core.Interfaces;
 
@@ -14,6 +15,8 @@ namespace WaifuCLI.Core.Cli
 
         public async Task<int> StartCli(string[] args)
         {
+            using CancellationTokenSource cts = new CancellationTokenSource();
+
             Option<string[]?> tags = new("--tags")
             {
                 Description = "List of tags for finding an image with those tags; Default: random image"
@@ -43,11 +46,16 @@ namespace WaifuCLI.Core.Cli
                 }
                 try
                 {
+                    string message = "Finding and downloading an image...";
+                    Task spinnerTask = Utils.Utils.StartSpinner(message, cts.Token);
                     await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath);
+                    cts.Cancel();
+                    await spinnerTask;
+                    Console.Write($"\r✓ {message}");
                 }
                 catch (CliException cex)
                 {
-                    Console.Error.WriteLine(cex.Message);
+                    Console.Error.Write($"\r{cex.Message}");
                     return 1;
                 }
                 catch (Exception ex)

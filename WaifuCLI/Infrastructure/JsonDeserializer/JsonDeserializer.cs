@@ -8,9 +8,9 @@ namespace WaifuCLI.Infrastructure.JsonDeserializer
 {
     public class JsonDeserializer : IJsonDeserializer
     {
-        public async Task<WaifuImage?> DeserializeImageJsonAsync(Stream responseStream)
+        public async Task<WaifuImage> DeserializeImageJsonAsync(Stream responseStream)
         {
-            WaifuImage? image;
+            WaifuImage image;
             RootJson<WaifuImage>? images = await JsonSerializer.DeserializeAsync<RootJson<WaifuImage>>(responseStream);
             if (images is null || images.items is null)
             {
@@ -18,8 +18,7 @@ namespace WaifuCLI.Infrastructure.JsonDeserializer
             }
             if (images.items.Count <= 0)
             {
-                image = null;
-                return image;
+                throw new ImageNotFoundException("No images with specified tags were found");
             }
             image = images.items[0]; 
             return image;

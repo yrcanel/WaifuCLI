@@ -47,7 +47,7 @@ namespace WaifuCLI.Tests
             });
         }
         [Fact]
-        public async Task DeserializeImageJsonAsync_NoImagesFound_ShouldParse()
+        public async Task DeserializeImageJsonAsync_NoImagesFound_ShouldThrow()
         {
 
             string json = """
@@ -55,8 +55,10 @@ namespace WaifuCLI.Tests
             """;
             using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             JsonDeserializer jsonDeserializer = new JsonDeserializer();
-            WaifuImage? image = await jsonDeserializer.DeserializeImageJsonAsync(stream);
-            Assert.Null(image);
+            await Assert.ThrowsAsync<ImageNotFoundException>(async () =>
+            {
+                await jsonDeserializer.DeserializeImageJsonAsync(stream);
+            });
         }
         [Fact]
         public async Task DeserializeTagJsonAsync_GoodJson_ShouldParse()
