@@ -35,12 +35,12 @@ get-tags                    list of available tags
 --outputPath (REQUIRED)     Path where the image will be saved
 --IsNsfw (bool)             Enable/disable 18+ content. Default: true
 --tags                      Tag used to find images (can be used multiple times). Default: random image
---ammount (int)             Number of images to download. Default: 1
+--amount (int)             Number of images to download. Default: 1
 ```
 ## Usage examples 
 This command downloads 5 images with the `waifu` tag into the specified folder:
 ```bash
-dotnet run --  --tags waifu  --ammount 5  --outputPath "Path\to\your\image"
+dotnet run --  --tags waifu  --amount 5  --outputPath "Path\to\your\image"
 ```
 Following linу lists available tags into your terminal
 ```bash
