@@ -11,39 +11,48 @@ namespace WaifuCLI.Tests
     public class UrlBuilderTest
     {
         [Fact]
-        public void BuildUrlWithTags_AllArgumentsGiven_ShouldReturnStr()
+        public void BuildUrlWithTags_AllArgumentsGivenAndAmmountOmited_ShouldReturnStr()
         {
-            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=True";
+            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=True&pageSize=1";
             UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
             UrlBuilder builder = new UrlBuilder(uriBuilder);
-            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], true);
+            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], true, null);
+            Assert.Equal(expectedUrl, resultUrl);
+        }
+        [Fact]
+        public void BuildUrlWithTags_AllArgumentsGiven_ShouldReturnStr()
+        {
+            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=True&pageSize=15";
+            UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
+            UrlBuilder builder = new UrlBuilder(uriBuilder);
+            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], true, 15);
             Assert.Equal(expectedUrl, resultUrl);
         }
         [Fact]
         public void BuildUrlWithTags_AllArgumentsOmited_ShouldReturnStr()
         {
-            string expectedUrl = "https://api.waifu.im/images?IsNsfw=All";
+            string expectedUrl = "https://api.waifu.im/images?IsNsfw=All&pageSize=1";
             UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
             UrlBuilder builder = new UrlBuilder(uriBuilder);
-            string resultUrl = builder.BuildUrlWithTags(null, null);
+            string resultUrl = builder.BuildUrlWithTags(null, null, null);
             Assert.Equal(expectedUrl, resultUrl);
         }
         [Fact]
         public void BuildUrlWithTags_TagsOmited_ShouldReturnStr()
         {
-            string expectedUrl = "https://api.waifu.im/images?IsNsfw=False";
+            string expectedUrl = "https://api.waifu.im/images?IsNsfw=False&pageSize=1";
             UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
             UrlBuilder builder = new UrlBuilder(uriBuilder);
-            string resultUrl = builder.BuildUrlWithTags(null, false);
+            string resultUrl = builder.BuildUrlWithTags(null, false, null);
             Assert.Equal(expectedUrl, resultUrl);
         }
         [Fact]
         public void BuildUrlWithTags_IsNsfwOmited_ShouldReturnStr()
         {
-            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=All";
+            string expectedUrl = "https://api.waifu.im/images?IncludedTags=waifu&IncludedTags=ero&IsNsfw=All&pageSize=1";
             UriBuilder uriBuilder = new UriBuilder("https://api.waifu.im/");
             UrlBuilder builder = new UrlBuilder(uriBuilder);
-            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], null);
+            string resultUrl = builder.BuildUrlWithTags(["waifu", "ero"], null, null);
             Assert.Equal(expectedUrl, resultUrl);
         }
         [Fact]

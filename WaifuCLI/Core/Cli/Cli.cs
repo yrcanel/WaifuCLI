@@ -19,11 +19,11 @@ namespace WaifuCLI.Core.Cli
 
             Option<string[]?> tags = new("--tags")
             {
-                Description = "List of tags for finding an image with those tags; Default: random image"
+                Description = "Tag used to find images (can be used multiple times). Default: random image"
             };
             Option<bool?> isNsfw = new("--IsNsfw")
             {
-                Description = "Turn on|off 18+ content; If omited: All"
+                Description = "Enable/disable 18+ content. Default: true"
             };
             Option<string> path = new("--outputPath")
             {
@@ -32,7 +32,7 @@ namespace WaifuCLI.Core.Cli
             };
             Option<int?> ammount = new("--ammount")
             {
-                Description = "Ammount of images to find and download; If omited: 1"
+                Description = "Number of images to download. Default: 1"
             };
             RootCommand rootCommand = new("Simple app for downloading waifu images");
             Command getTags = new("get-tags", "Display a list of awailable tags");

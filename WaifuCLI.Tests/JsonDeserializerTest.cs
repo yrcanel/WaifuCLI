@@ -14,7 +14,11 @@ namespace WaifuCLI.Tests
         [Fact]
         public async Task DeserializeImageJsonAsync_GoodJson_ShouldParse()
         {
-            WaifuImage expectedWaifuImage = new WaifuImage(7783, false, new Uri("https://cdn.waifu.im/7783.jpg"));
+            WaifuImage[] expectedWaifuImages =
+                [
+                    new WaifuImage(7783, false, new Uri("https://cdn.waifu.im/7783.jpg")),
+                    new WaifuImage(7317, false, new Uri("https://cdn.waifu.im/7317.jpg"))
+                ];
             string json = """
             {
             	"items": [
@@ -22,15 +26,23 @@ namespace WaifuCLI.Tests
             			"id": 7783,
             			"isNsfw": false,
             			"url": "https://cdn.waifu.im/7783.jpg"
+                    },
+                    {
+            			"id": 7317,
+            			"isNsfw": false,
+            			"url": "https://cdn.waifu.im/7317.jpg"
                     }
                 ]
             }
             """;
             using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             JsonDeserializer jsonDeserializer = new JsonDeserializer();
-            WaifuImage? resultWaifuImage = await jsonDeserializer.DeserializeImageJsonAsync(stream);
-            Assert.NotNull(resultWaifuImage);
-            Assert.Equal(expectedWaifuImage, resultWaifuImage);
+            WaifuImage[] resultWaifuImages = await jsonDeserializer.DeserializeImageJsonAsync(stream);
+            foreach(WaifuImage image in resultWaifuImages)
+            {
+                Assert.NotNull(image);
+            }
+            Assert.Equal(expectedWaifuImages, resultWaifuImages);
         }
         [Fact]
         public async Task DeserializeImageJsonAsync_NoPayloadFound_ShouldThrow()

@@ -21,6 +21,11 @@ namespace WaifuCLI.Tests
             			"id": 7783,
             			"isNsfw": false,
             			"url": "https://cdn.waifu.im/7783.jpg"
+                    },
+                    {
+            			"id": 7317,
+            			"isNsfw": false,
+            			"url": "https://cdn.waifu.im/7317.jpg"
                     }
                 ]
             }
@@ -32,9 +37,9 @@ namespace WaifuCLI.Tests
             HttpMessageHandler handler = new FakeHandler(httpResponse);
             HttpClient client = new HttpClient(handler);
             IUrlBuilder builder = Substitute.For<IUrlBuilder>();
-            builder.BuildUrlWithTags(Arg.Any<string[]?>(), Arg.Any<bool?>()).Returns("https://api.waifu.im/images?IncludedTags=ecchi&isNsfw=True");
+            builder.BuildUrlWithTags(Arg.Any<string[]?>(), Arg.Any<bool?>(), 2).Returns("https://api.waifu.im/images?IncludedTags=ecchi&isNsfw=True&pageSize=2");
             ApiClient apiClient = new ApiClient(client, builder);
-            Stream respStream = await apiClient.GetResponseStreamAsync(["ecchi"], true);
+            Stream respStream = await apiClient.GetResponseStreamAsync(["ecchi"], true, 2); 
 
             Assert.NotNull(respStream);
         }
@@ -50,11 +55,11 @@ namespace WaifuCLI.Tests
             HttpMessageHandler handler = new FakeHandler(httpResponse);
             HttpClient client = new HttpClient(handler);
             IUrlBuilder builder = Substitute.For<IUrlBuilder>();
-            builder.BuildUrlWithTags(Arg.Any<string[]?>(), Arg.Any<bool?>()).Returns("https://api.waifu.im/images?Tag=ecchi&isNsfw=True");
+            builder.BuildUrlWithTags(Arg.Any<string[]?>(), Arg.Any<bool?>(), null).Returns("https://api.waifu.im/images?Tag=ecchi&isNsfw=True&pageSize=1");
             ApiClient apiClient = new ApiClient(client, builder);
             ApiException ex = await Assert.ThrowsAsync<ApiException>(async () =>
             {
-                await apiClient.GetResponseStreamAsync(null, null);
+                await apiClient.GetResponseStreamAsync(null, null, null);
             });
             Assert.Equal(400, ex.StatusCode);
             Assert.Equal("HTTP 400 : Bad Request", ex.Message);
