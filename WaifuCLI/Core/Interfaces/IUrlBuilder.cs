@@ -2,7 +2,7 @@
 {
     public interface IUrlBuilder
     {
-        string BuildUrlWithTags(string[]? tags, bool? isNsfw);
+        string BuildUrlWithTags(string[]? tags, bool? isNsfw, int? ammount);
         string BuildUrlForTags();
     }
 }

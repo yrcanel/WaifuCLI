@@ -23,12 +23,16 @@ namespace WaifuCLI.Core.Cli
             };
             Option<bool?> isNsfw = new("--IsNsfw")
             {
-                Description = "Turn on|off 18+ content; Default: All"
+                Description = "Turn on|off 18+ content; If omited: All"
             };
             Option<string> path = new("--outputPath")
             {
                 Required = true,
                 Description = "Path where the image will be saved"
+            };
+            Option<int?> ammount = new("--ammount")
+            {
+                Description = "Ammount of images to find and download; If omited: 1"
             };
             RootCommand rootCommand = new("Simple app for downloading waifu images");
             Command getTags = new("get-tags", "Display a list of awailable tags");
@@ -37,6 +41,7 @@ namespace WaifuCLI.Core.Cli
             rootCommand.Add(path);
             rootCommand.Add(isNsfw);
             rootCommand.Add(tags);
+            rootCommand.Add(ammount);
             rootCommand.SetAction(async parseResult =>
             {
                 string? outputPath = parseResult.GetValue(path);
@@ -44,11 +49,21 @@ namespace WaifuCLI.Core.Cli
                 {
                     return 1;
                 }
+                int? count = parseResult.GetValue(ammount);
+                string message;
+                if (count is null || count == 1)
+                {
+                    message = "Finding and downloading an image...";
+                }
+                else
+                {
+                    message = "Finding and downloading images...";
+                }
                 try
                 {
-                    string message = "Finding and downloading an image...";
+                    
                     Task spinnerTask = Utils.Utils.StartSpinner(message, cts.Token);
-                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath);
+                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath, parseResult.GetValue(ammount));
                     cts.Cancel();
                     await spinnerTask;
                     Console.Write($"\r✓ {message}");

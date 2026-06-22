@@ -2,7 +2,7 @@
 {
     public interface IApiClient
     {
-        Task<Stream> GetResponseStreamAsync(string[]? tags, bool? isNsfw);
+        Task<Stream> GetResponseStreamAsync(string[]? tags, bool? isNsfw, int? ammount);
         Task<Stream> GetTagsStreamAsync();
     }
 }

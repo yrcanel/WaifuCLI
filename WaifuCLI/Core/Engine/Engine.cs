@@ -19,18 +19,27 @@ namespace WaifuCLI.Core.Engine
             _jsonDeserializer = jsonDeserializer;       
         }
 
-        public async Task  GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir)
+        public async Task GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir, int? ammount)
         {
-            using Stream waifuStream = await _apiClient.GetResponseStreamAsync(tags, IsNsfw);
-            WaifuImage waifuImageObject = await _jsonDeserializer.DeserializeImageJsonAsync(waifuStream);
-            using Stream imageStream = await _imageClient.GetImageStreamAsync(waifuImageObject.url);
-            await _imageDownloader.DownloadImageAsync($"{outputDir}/{waifuImageObject.id}.png", imageStream);
+            using Stream waifuStream = await _apiClient.GetResponseStreamAsync(tags, IsNsfw, ammount);
+            WaifuImage[] waifuImageObjects = await _jsonDeserializer.DeserializeImageJsonAsync(waifuStream);
+            List<Task> downloadImagesTasks = new List<Task>();
+            foreach (WaifuImage image in waifuImageObjects)
+            {
+                downloadImagesTasks.Add(ProcessImageObject(image, outputDir));
+            }
+            await Task.WhenAll(downloadImagesTasks);
         }
         public async Task GetAndPrintTagsAsync()
         {
             using Stream tagsStream = await _apiClient.GetTagsStreamAsync();
             Tag[] tags = await _jsonDeserializer.DeserializeTagJsonAsync(tagsStream);
             await Utils.Utils.PrintTagsAsync(tags);
+        }
+        private async Task ProcessImageObject(WaifuImage image, string outputDir)
+        {
+            using Stream imageStream = await _imageClient.GetImageStreamAsync(image.url);
+            await _imageDownloader.DownloadImageAsync($"{outputDir}/{image.id}.png", imageStream);
         }
     }
 }
