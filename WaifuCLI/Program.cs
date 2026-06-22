@@ -23,6 +23,7 @@ namespace WaifuCLI
             {
                 return new UriBuilder("https://api.waifu.im/");
             });
+            services.AddSingleton<SemaphoreSlim>(new SemaphoreSlim(3));
             services.AddSingleton<IUrlBuilder, UrlBuilder>();
             services.AddSingleton<IJsonDeserializer, JsonDeserializer>();
             services.AddSingleton<IImageClient, ImageClient>();

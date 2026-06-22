@@ -11,12 +11,14 @@ namespace WaifuCLI.Core.Engine
         private readonly IImageClient _imageClient;
         private readonly IImageDownloader _imageDownloader;
         private readonly IJsonDeserializer _jsonDeserializer;
-        public Engine(IApiClient apiClient, IImageClient imageClient, IImageDownloader imageDownloader, IJsonDeserializer jsonDeserializer)
+        private readonly SemaphoreSlim _semaphore;
+        public Engine(IApiClient apiClient, IImageClient imageClient, IImageDownloader imageDownloader, IJsonDeserializer jsonDeserializer, SemaphoreSlim semaphore)
         {
             _apiClient = apiClient;
             _imageClient = imageClient;
             _imageDownloader = imageDownloader;
-            _jsonDeserializer = jsonDeserializer;       
+            _jsonDeserializer = jsonDeserializer;  
+            _semaphore = semaphore;
         }
 
         public async Task GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir, int? ammount)
@@ -38,8 +40,16 @@ namespace WaifuCLI.Core.Engine
         }
         private async Task ProcessImageObject(WaifuImage image, string outputDir)
         {
-            using Stream imageStream = await _imageClient.GetImageStreamAsync(image.url);
-            await _imageDownloader.DownloadImageAsync($"{outputDir}/{image.id}.png", imageStream);
+            await _semaphore.WaitAsync();
+            try
+            {
+                using Stream imageStream = await _imageClient.GetImageStreamAsync(image.url);
+                await _imageDownloader.DownloadImageAsync($"{outputDir}/{image.id}.png", imageStream);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }
