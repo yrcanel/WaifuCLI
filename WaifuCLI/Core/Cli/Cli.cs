@@ -30,7 +30,7 @@ namespace WaifuCLI.Core.Cli
                 Required = true,
                 Description = "Path where the image will be saved"
             };
-            Option<int?> ammount = new("--ammount")
+            Option<int?> amount = new("--amount")
             {
                 Description = "Number of images to download. Default: 1"
             };
@@ -41,7 +41,7 @@ namespace WaifuCLI.Core.Cli
             rootCommand.Add(path);
             rootCommand.Add(isNsfw);
             rootCommand.Add(tags);
-            rootCommand.Add(ammount);
+            rootCommand.Add(amount);
             rootCommand.SetAction(async parseResult =>
             {
                 string? outputPath = parseResult.GetValue(path);
@@ -49,7 +49,7 @@ namespace WaifuCLI.Core.Cli
                 {
                     return 1;
                 }
-                int? count = parseResult.GetValue(ammount);
+                int? count = parseResult.GetValue(amount);
                 string message;
                 if (count is null || count == 1)
                 {
@@ -63,7 +63,7 @@ namespace WaifuCLI.Core.Cli
                 {
                     
                     Task spinnerTask = Utils.Utils.StartSpinner(message, cts.Token);
-                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath, parseResult.GetValue(ammount));
+                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath, parseResult.GetValue(amount));
                     cts.Cancel();
                     await spinnerTask;
                     Console.Write($"\r✓ {message}");

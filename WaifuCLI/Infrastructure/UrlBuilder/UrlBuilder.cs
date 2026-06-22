@@ -10,7 +10,7 @@ namespace WaifuCLI.Infrastructure.UrlBuilder
             _uriBuilder = uriBuilder;
         }
 
-        public string BuildUrlWithTags(string[]? tags, bool? isNsfw, int? ammount)
+        public string BuildUrlWithTags(string[]? tags, bool? isNsfw, int? amount)
         {
             _uriBuilder.Path = "images";
             if (tags != null)
@@ -29,9 +29,9 @@ namespace WaifuCLI.Infrastructure.UrlBuilder
             {
                 AppendValue($"IsNsfw=All");
             }
-            if (ammount != null)
+            if (amount != null)
             {
-                AppendValue($"pageSize={ammount}");
+                AppendValue($"pageSize={amount}");
             }
             else
             {

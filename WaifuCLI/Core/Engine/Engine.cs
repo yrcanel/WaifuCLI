@@ -21,9 +21,9 @@ namespace WaifuCLI.Core.Engine
             _semaphore = semaphore;
         }
 
-        public async Task GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir, int? ammount)
+        public async Task GetAndDownloadImageAsync(string[]? tags, bool? IsNsfw, string outputDir, int? amount)
         {
-            using Stream waifuStream = await _apiClient.GetResponseStreamAsync(tags, IsNsfw, ammount);
+            using Stream waifuStream = await _apiClient.GetResponseStreamAsync(tags, IsNsfw, amount);
             WaifuImage[] waifuImageObjects = await _jsonDeserializer.DeserializeImageJsonAsync(waifuStream);
             List<Task> downloadImagesTasks = new List<Task>();
             foreach (WaifuImage image in waifuImageObjects)
