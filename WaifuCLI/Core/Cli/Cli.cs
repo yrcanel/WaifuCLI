@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.Security.Cryptography.X509Certificates;
 using WaifuCLI.Core.Exceptions;
 using WaifuCLI.Core.Interfaces;
 
@@ -17,41 +16,50 @@ namespace WaifuCLI.Core.Cli
         {
             using CancellationTokenSource cts = new CancellationTokenSource();
 
-            Option<string[]?> tags = new("--tags")
+            Option<string[]?> tagsOption = new("--tags")
             {
                 Description = "Tag used to find images (can be used multiple times). Default: random image"
             };
-            Option<bool?> isNsfw = new("--IsNsfw")
+            Option<bool?> isNsfwOption = new("--IsNsfw")
             {
                 Description = "Enable/disable 18+ content. Default: true"
             };
-            Option<string> path = new("--outputPath")
+            Option<FileInfo> pathOption = new("--outputPath")
             {
                 Required = true,
                 Description = "Path where the image will be saved"
             };
-            Option<int?> amount = new("--amount")
+            pathOption.AcceptExistingOnly();
+            Option<int?> amountOption = new("--amount")
             {
                 Description = "Number of images to download. Default: 1"
             };
+            amountOption.Validators.Add(result =>
+            {
+                int? amount = result.GetValue(amountOption);
+                if (amount is not null && (amount < 1 || amount > 100))
+                {
+                    result.AddError("Amount should be a positive integer between 1 and 100");
+                }
+            });
             RootCommand rootCommand = new("Simple app for downloading waifu images");
             Command getTags = new("get-tags", "Display a list of awailable tags");
             rootCommand.Subcommands.Add(getTags);
 
-            rootCommand.Add(path);
-            rootCommand.Add(isNsfw);
-            rootCommand.Add(tags);
-            rootCommand.Add(amount);
+            rootCommand.Add(pathOption);
+            rootCommand.Add(isNsfwOption);
+            rootCommand.Add(tagsOption);
+            rootCommand.Add(amountOption);
             rootCommand.SetAction(async parseResult =>
             {
-                string? outputPath = parseResult.GetValue(path);
+                FileInfo? outputPath = parseResult.GetValue(pathOption);
                 if (outputPath is null)
                 {
                     return 1;
                 }
-                int? count = parseResult.GetValue(amount);
+                int? amount = parseResult.GetValue(amountOption);
                 string message;
-                if (count is null || count == 1)
+                if (amount is null || amount == 1)
                 {
                     message = "Finding and downloading an image...";
                 }
@@ -63,7 +71,8 @@ namespace WaifuCLI.Core.Cli
                 {
                     
                     Task spinnerTask = Utils.Utils.StartSpinner(message, cts.Token);
-                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tags), parseResult.GetValue(isNsfw), outputPath, parseResult.GetValue(amount));
+                    await _engine.GetAndDownloadImageAsync(parseResult.GetValue(tagsOption), parseResult.GetValue(isNsfwOption), outputPath.FullName, amount);
+
                     cts.Cancel();
                     await spinnerTask;
                     Console.Write($"\r✓ {message}");

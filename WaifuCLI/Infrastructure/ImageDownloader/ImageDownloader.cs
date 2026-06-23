@@ -17,10 +17,6 @@ namespace WaifuCLI.Infrastructure.ImageDownloader
             {
                 throw new DownloadException("Failed to write file: UnauthorizedAccess");
             }
-            catch (DirectoryNotFoundException)
-            {
-                throw new DownloadException("Specified directory isn't found");
-            }
             catch (PathTooLongException)
             {
                 throw new DownloadException($"Specified path is too long");
