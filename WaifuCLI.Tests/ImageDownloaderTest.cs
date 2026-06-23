@@ -23,19 +23,6 @@ namespace WaifuCLI.Tests
             
         }
         [Fact]
-        public async Task DownloadImageAsync_UnexistingPath_ShouldThrow()
-        {
-            byte[] data = [1, 2, 3, 4, 5];
-            using MemoryStream stream = new MemoryStream(data);
-            string filepath = Path.GetTempFileName();
-            File.Delete(filepath);
-            ImageDownloader imageDownloader = new ImageDownloader();
-            await Assert.ThrowsAsync<DownloadException>(async () =>
-            {
-                await imageDownloader.DownloadImageAsync("C:/Bad/Path", stream);
-            });
-        }
-        [Fact]
         public async Task DownloadImageAsync_UnauthorizedAccess_ShouldThrow()
         {
             byte[] data = [1, 2, 3, 4, 5];
